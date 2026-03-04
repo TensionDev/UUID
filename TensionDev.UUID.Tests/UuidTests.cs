@@ -1,17 +1,16 @@
 ﻿using System;
-using TensionDev.UUID;
 using Xunit;
 
-namespace XUnitTestProjectUUID
+namespace TensionDev.UUID.Tests
 {
-    public class UnitTestUuid
+    public class UuidTests
     {
         [Fact]
         public void TestEmptyUUID()
         {
             string expectedUUID = "00000000-0000-0000-0000-000000000000";
 
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Empty;
+            Uuid uuid = Uuid.Empty;
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -20,7 +19,7 @@ namespace XUnitTestProjectUUID
         {
             string expectedUUID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
 
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Max;
+            Uuid uuid = Uuid.Max;
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -28,14 +27,14 @@ namespace XUnitTestProjectUUID
         public void TestConstructorByteArray1()
         {
             byte[] vs = null;
-            Assert.Throws<ArgumentNullException>(() => { new TensionDev.UUID.Uuid(vs); });
+            Assert.Throws<ArgumentNullException>(() => { new Uuid(vs); });
         }
 
         [Fact]
         public void TestConstructorByteArray2()
         {
             byte[] vs = new byte[17];
-            Assert.Throws<ArgumentException>(() => { new TensionDev.UUID.Uuid(vs); });
+            Assert.Throws<ArgumentException>(() => { new Uuid(vs); });
         }
 
         [Fact]
@@ -44,7 +43,7 @@ namespace XUnitTestProjectUUID
             string expectedUUID = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
 
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -52,14 +51,14 @@ namespace XUnitTestProjectUUID
         public void TestConstructorString1()
         {
             string vs = null;
-            Assert.Throws<ArgumentNullException>(() => { new TensionDev.UUID.Uuid(vs); });
+            Assert.Throws<ArgumentNullException>(() => { new Uuid(vs); });
         }
 
         [Fact]
         public void TestConstructorString2()
         {
             string vs = "(7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            Assert.Throws<FormatException>(() => { new TensionDev.UUID.Uuid(vs); });
+            Assert.Throws<FormatException>(() => { new Uuid(vs); });
         }
 
         [Fact]
@@ -68,7 +67,7 @@ namespace XUnitTestProjectUUID
             string expectedUUID = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
 
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -81,7 +80,7 @@ namespace XUnitTestProjectUUID
             byte d = byte.MaxValue;
             byte e = byte.MaxValue;
             byte[] f = null;
-            Assert.Throws<ArgumentNullException>(() => { new TensionDev.UUID.Uuid(a, b, c, d, e, f); });
+            Assert.Throws<ArgumentNullException>(() => { new Uuid(a, b, c, d, e, f); });
         }
 
         [Fact]
@@ -93,7 +92,7 @@ namespace XUnitTestProjectUUID
             byte d = byte.MinValue;
             byte e = byte.MinValue;
             byte[] f = new byte[5];
-            Assert.Throws<ArgumentException>(() => { new TensionDev.UUID.Uuid(a, b, c, d, e, f); });
+            Assert.Throws<ArgumentException>(() => { new Uuid(a, b, c, d, e, f); });
         }
 
         [Fact]
@@ -107,7 +106,7 @@ namespace XUnitTestProjectUUID
             byte e = 69;
             byte[] f = [0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
 
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(a, b, c, d, e, f);
+            Uuid uuid = new Uuid(a, b, c, d, e, f);
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -127,7 +126,7 @@ namespace XUnitTestProjectUUID
             byte j = 0xfa;
             byte k = 0xd2;
 
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(a, b, c, d, e, f, g, h, i, j, k);
+            Uuid uuid = new Uuid(a, b, c, d, e, f, g, h, i, j, k);
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -136,7 +135,7 @@ namespace XUnitTestProjectUUID
         {
             string expectedUUID = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
 
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(expectedUUID);
+            Uuid uuid = Uuid.Parse(expectedUUID);
             Assert.Equal(expectedUUID, uuid.ToString());
         }
 
@@ -145,7 +144,7 @@ namespace XUnitTestProjectUUID
         {
             string expectedUUID = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
 
-            bool result = TensionDev.UUID.Uuid.TryParse(expectedUUID, out TensionDev.UUID.Uuid uuid);
+            bool result = Uuid.TryParse(expectedUUID, out Uuid uuid);
             Assert.Equal(expectedUUID, uuid.ToString());
             Assert.True(result);
         }
@@ -156,7 +155,7 @@ namespace XUnitTestProjectUUID
             string expectedUUID = "00000000-0000-0000-0000-000000000000";
             string vs = "(7d444840-9dc0-11d1-b245-5ffdce74fad2}";
 
-            bool result = TensionDev.UUID.Uuid.TryParse(vs, out TensionDev.UUID.Uuid uuid);
+            bool result = Uuid.TryParse(vs, out Uuid uuid);
             Assert.Equal(expectedUUID, uuid.ToString());
             Assert.False(result);
         }
@@ -166,7 +165,7 @@ namespace XUnitTestProjectUUID
         {
             object other = new object();
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             int actualResult = uuid.CompareTo(other);
             Assert.True(actualResult > 0);
@@ -177,8 +176,8 @@ namespace XUnitTestProjectUUID
         {
             int expectedResult = 0;
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            object other = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            object other = Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             int actualResult = uuid.CompareTo(other);
             Assert.Equal(expectedResult, actualResult);
@@ -189,8 +188,8 @@ namespace XUnitTestProjectUUID
         {
             int expectedResult = 0;
             string vs = "7d4448409dc011d1b2455ffdce74fad2";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.Equal(expectedResult, actualResult);
@@ -199,8 +198,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToTimeLow()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448309dc011d1b2455ffdce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448309dc011d1b2455ffdce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -209,8 +208,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToTimeMid()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dd011d1b2455ffdce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dd011d1b2455ffdce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult > 0);
@@ -219,8 +218,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToTimeHigh()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011c1b2455ffdce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011c1b2455ffdce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -229,8 +228,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToClockHigh()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1a2455ffdce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1a2455ffdce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -239,8 +238,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToClockLow()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2555ffdce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2555ffdce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult > 0);
@@ -249,8 +248,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToNode1()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455efdce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2455efdce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -259,8 +258,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToNode2()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffcce74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2455ffcce74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -269,8 +268,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToNode3()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdcd74fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2455ffdcd74fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -279,8 +278,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToNode4()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce73fad2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2455ffdce73fad2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult < 0);
@@ -289,8 +288,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToNode5()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fbd2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fbd2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult > 0);
@@ -299,8 +298,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestCompareToNode6()
         {
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74faf2");
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
+            Uuid uuid1 = Uuid.Parse("7d4448409dc011d1b2455ffdce74faf2");
+            Uuid uuid2 = Uuid.Parse("7d4448409dc011d1b2455ffdce74fad2");
 
             int actualResult = uuid1.CompareTo(uuid2);
             Assert.True(actualResult > 0);
@@ -311,7 +310,7 @@ namespace XUnitTestProjectUUID
         {
             object other = new object();
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid.Equals(other);
             Assert.False(actualResult);
@@ -321,8 +320,8 @@ namespace XUnitTestProjectUUID
         public void TestEquals2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1.Equals(uuid2);
             Assert.True(actualResult);
@@ -333,7 +332,7 @@ namespace XUnitTestProjectUUID
         {
             byte[] expected = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             byte[] actual = uuid.ToByteArray();
             Assert.Equal(expected, actual);
@@ -343,7 +342,7 @@ namespace XUnitTestProjectUUID
         public void TestToGuid()
         {
             Guid expected = new Guid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
+            Uuid uuid = new Uuid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
 
             Guid actual = uuid.ToGuid();
             Assert.Equal(expected, actual);
@@ -353,7 +352,7 @@ namespace XUnitTestProjectUUID
         public void TestToVariant2()
         {
             Guid expected = new Guid("7d444840-9dc0-11d1-d245-5ffdce74fad2");
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
+            Uuid uuid = new Uuid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
 
             Guid actual = uuid.ToMicrosoftVariant();
             Assert.Equal(expected, actual);
@@ -362,10 +361,10 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestToVariant1()
         {
-            TensionDev.UUID.Uuid expected = new TensionDev.UUID.Uuid("7d444840-9dc0-11d1-9245-5ffdce74fad2");
+            Uuid expected = new Uuid("7d444840-9dc0-11d1-9245-5ffdce74fad2");
             Guid guid = new Guid("7d444840-9dc0-11d1-d245-5ffdce74fad2");
 
-            TensionDev.UUID.Uuid actual = TensionDev.UUID.Uuid.ToRfc4122Variant(guid);
+            Uuid actual = Uuid.ToRfc4122Variant(guid);
             Assert.Equal(expected, actual);
         }
 
@@ -374,7 +373,7 @@ namespace XUnitTestProjectUUID
         {
             string expected = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             string actual = uuid.ToString();
             Assert.Equal(expected, actual);
@@ -385,7 +384,7 @@ namespace XUnitTestProjectUUID
         {
             string expected = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             string actual = uuid.ToString(null);
             Assert.Equal(expected, actual);
@@ -396,7 +395,7 @@ namespace XUnitTestProjectUUID
         {
             string expected = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             string actual = uuid.ToString(String.Empty);
             Assert.Equal(expected, actual);
@@ -407,7 +406,7 @@ namespace XUnitTestProjectUUID
         {
             string expected = "7d4448409dc011d1b2455ffdce74fad2";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             string actual = uuid.ToString("N");
             Assert.Equal(expected, actual);
@@ -418,7 +417,7 @@ namespace XUnitTestProjectUUID
         {
             string expected = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             string actual = uuid.ToString("B");
             Assert.Equal(expected, actual);
@@ -429,7 +428,7 @@ namespace XUnitTestProjectUUID
         {
             string expected = "(7d444840-9dc0-11d1-b245-5ffdce74fad2)";
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             string actual = uuid.ToString("P");
             Assert.Equal(expected, actual);
@@ -439,7 +438,7 @@ namespace XUnitTestProjectUUID
         public void TestToString7()
         {
             byte[] vs = [0x7d, 0x44, 0x48, 0x40, 0x9d, 0xc0, 0x11, 0xd1, 0xb2, 0x45, 0x5f, 0xfd, 0xce, 0x74, 0xfa, 0xd2];
-            TensionDev.UUID.Uuid uuid = new TensionDev.UUID.Uuid(vs);
+            Uuid uuid = new Uuid(vs);
 
             Assert.Throws<FormatException>(() => { uuid.ToString("C"); });
         }
@@ -449,7 +448,7 @@ namespace XUnitTestProjectUUID
         {
             object other = new object();
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = (uuid == other);
             Assert.False(actualResult);
@@ -459,8 +458,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorEquals2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1 == uuid2;
             Assert.True(actualResult);
@@ -469,8 +468,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOperatorEquals3()
         {
-            TensionDev.UUID.Uuid other = null;
-            TensionDev.UUID.Uuid uuid = null;
+            Uuid other = null;
+            Uuid uuid = null;
 
             bool actualResult = uuid == other;
             Assert.True(actualResult);
@@ -480,8 +479,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorEquals4()
         {
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid other = null;
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid other = null;
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid == other;
             Assert.False(actualResult);
@@ -491,8 +490,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorEquals5()
         {
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid other = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid = null;
+            Uuid other = Uuid.Parse(vs);
+            Uuid uuid = null;
 
             bool actualResult = uuid == other;
             Assert.False(actualResult);
@@ -503,7 +502,7 @@ namespace XUnitTestProjectUUID
         {
             object other = new object();
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = (uuid != other);
             Assert.True(actualResult);
@@ -513,8 +512,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorNotEquals2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1 != uuid2;
             Assert.False(actualResult);
@@ -523,9 +522,9 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOperatorNotEquals3()
         {
-            TensionDev.UUID.Uuid other = null;
+            Uuid other = null;
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid != other;
             Assert.True(actualResult);
@@ -536,8 +535,8 @@ namespace XUnitTestProjectUUID
         {
             string vs1 = "7d444830-9dc0-11d1-b245-5ffdce74fad2";
             string vs2 = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs1);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs2);
+            Uuid uuid1 = Uuid.Parse(vs1);
+            Uuid uuid2 = Uuid.Parse(vs2);
 
             bool actualResult = uuid1 < uuid2;
             Assert.True(actualResult);
@@ -547,8 +546,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorLessThan2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1 < uuid2;
             Assert.False(actualResult);
@@ -557,9 +556,9 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOperatorLessThan3()
         {
-            TensionDev.UUID.Uuid other = null;
+            Uuid other = null;
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid < other;
             Assert.False(actualResult);
@@ -570,8 +569,8 @@ namespace XUnitTestProjectUUID
         {
             string vs1 = "7d444830-9dc0-11d1-b245-5ffdce74fad2";
             string vs2 = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs1);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs2);
+            Uuid uuid1 = Uuid.Parse(vs1);
+            Uuid uuid2 = Uuid.Parse(vs2);
 
             bool actualResult = uuid1 > uuid2;
             Assert.False(actualResult);
@@ -581,8 +580,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorGreaterThan2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1 > uuid2;
             Assert.False(actualResult);
@@ -591,9 +590,9 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOperatorGreaterThan3()
         {
-            TensionDev.UUID.Uuid other = null;
+            Uuid other = null;
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid > other;
             Assert.True(actualResult);
@@ -604,8 +603,8 @@ namespace XUnitTestProjectUUID
         {
             string vs1 = "7d444830-9dc0-11d1-b245-5ffdce74fad2";
             string vs2 = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs1);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs2);
+            Uuid uuid1 = Uuid.Parse(vs1);
+            Uuid uuid2 = Uuid.Parse(vs2);
 
             bool actualResult = uuid1 <= uuid2;
             Assert.True(actualResult);
@@ -615,8 +614,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorLessThanOrEqual2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1 <= uuid2;
             Assert.True(actualResult);
@@ -625,9 +624,9 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOperatorLessThanOrEqual3()
         {
-            TensionDev.UUID.Uuid other = null;
+            Uuid other = null;
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid <= other;
             Assert.False(actualResult);
@@ -638,8 +637,8 @@ namespace XUnitTestProjectUUID
         {
             string vs1 = "7d444830-9dc0-11d1-b245-5ffdce74fad2";
             string vs2 = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs1);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs2);
+            Uuid uuid1 = Uuid.Parse(vs1);
+            Uuid uuid2 = Uuid.Parse(vs2);
 
             bool actualResult = uuid1 >= uuid2;
             Assert.False(actualResult);
@@ -649,8 +648,8 @@ namespace XUnitTestProjectUUID
         public void TestOperatorGreaterThanOrEqual2()
         {
             string vs = "{7d444840-9dc0-11d1-b245-5ffdce74fad2}";
-            TensionDev.UUID.Uuid uuid1 = TensionDev.UUID.Uuid.Parse(vs);
-            TensionDev.UUID.Uuid uuid2 = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid1 = Uuid.Parse(vs);
+            Uuid uuid2 = Uuid.Parse(vs);
 
             bool actualResult = uuid1 >= uuid2;
             Assert.True(actualResult);
@@ -659,9 +658,9 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOperatorGreaterThanOrEqual3()
         {
-            TensionDev.UUID.Uuid other = null;
+            Uuid other = null;
             string vs = "7d444840-9dc0-11d1-b245-5ffdce74fad2";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.Uuid.Parse(vs);
+            Uuid uuid = Uuid.Parse(vs);
 
             bool actualResult = uuid >= other;
             Assert.True(actualResult);

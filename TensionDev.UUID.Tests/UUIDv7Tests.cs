@@ -5,14 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace XUnitTestProjectUUID
+namespace TensionDev.UUID.Tests
 {
-    public class UnitTestUUIDv7
+    public class UUIDv7Tests
     {
         [Fact]
         public void TestGetRandomA()
         {
-            byte[] randA = TensionDev.UUID.UUIDv7.GetRandomA();
+            byte[] randA = UUIDv7.GetRandomA();
 
             Assert.Equal(2, randA.Length);
         }
@@ -20,8 +20,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestRandomGetRandomA()
         {
-            byte[] randA1 = TensionDev.UUID.UUIDv7.GetRandomA();
-            byte[] randA2 = TensionDev.UUID.UUIDv7.GetRandomA();
+            byte[] randA1 = UUIDv7.GetRandomA();
+            byte[] randA2 = UUIDv7.GetRandomA();
 
             Assert.NotEqual(randA1, randA2);
         }
@@ -29,7 +29,7 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestGetFixedBitLengthDedicatedCounterA()
         {
-            byte[] counterA = TensionDev.UUID.UUIDv7.GetFixedBitLengthDedicatedCounterA();
+            byte[] counterA = UUIDv7.GetFixedBitLengthDedicatedCounterA();
 
             Assert.Equal(2, counterA.Length);
         }
@@ -37,12 +37,12 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestUniqueGetFixedBitLengthDedicatedCounterA()
         {
-            ConcurrentBag<Byte[]> countersA = new ConcurrentBag<Byte[]>();
+            ConcurrentBag<Byte[]> countersA = [];
 
             Parallel.For(0, 0x1000,
                 counter =>
                 {
-                    countersA.Add(TensionDev.UUID.UUIDv7.GetFixedBitLengthDedicatedCounterA());
+                    countersA.Add(UUIDv7.GetFixedBitLengthDedicatedCounterA());
                 });
 
             IEnumerable<Byte[]> distinctCounters = countersA.Distinct();
@@ -55,12 +55,12 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOverflowGetCounterA()
         {
-            ConcurrentBag<Byte[]> countersA = new ConcurrentBag<Byte[]>();
+            ConcurrentBag<Byte[]> countersA = [];
 
             Parallel.For(0, 0x4000,
                 counter =>
                 {
-                    countersA.Add(TensionDev.UUID.UUIDv7.GetFixedBitLengthDedicatedCounterA());
+                    countersA.Add(UUIDv7.GetFixedBitLengthDedicatedCounterA());
                 });
 
             IEnumerable<Int16> distinctCounters = countersA.Select(m => BitConverter.ToInt16(m)).Distinct();
@@ -73,7 +73,7 @@ namespace XUnitTestProjectUUID
         public void TestGetIncreasedClockPrecisionA()
         {
             DateTime dateTime = DateTime.Now;
-            byte[] counterA = TensionDev.UUID.UUIDv7.GetIncreasedClockPrecisionA(dateTime);
+            byte[] counterA = UUIDv7.GetIncreasedClockPrecisionA(dateTime);
 
             Assert.Equal(2, counterA.Length);
         }
@@ -81,7 +81,7 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestOverflowGetIncreasedClockPrecisionA()
         {
-            ConcurrentBag<Byte[]> countersA = new ConcurrentBag<Byte[]>();
+            ConcurrentBag<Byte[]> countersA = [];
 
             DateTime start = DateTime.Now;
             DateTime end = start.AddMilliseconds(1);
@@ -90,7 +90,7 @@ namespace XUnitTestProjectUUID
                 ticks =>
                 {
                     DateTime dateTime = new DateTime(ticks, DateTimeKind.Local);
-                    countersA.Add(TensionDev.UUID.UUIDv7.GetIncreasedClockPrecisionA(dateTime));
+                    countersA.Add(UUIDv7.GetIncreasedClockPrecisionA(dateTime));
                 });
 
             IEnumerable<Int16> distinctCounters = countersA.Select(m => BitConverter.ToInt16(m)).Distinct();
@@ -102,7 +102,7 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestGetRandomB()
         {
-            byte[] randB = TensionDev.UUID.UUIDv7.GetRandomB();
+            byte[] randB = UUIDv7.GetRandomB();
 
             Assert.Equal(8, randB.Length);
         }
@@ -110,8 +110,8 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestRandomGetRandomB()
         {
-            byte[] randB1 = TensionDev.UUID.UUIDv7.GetRandomB();
-            byte[] randB2 = TensionDev.UUID.UUIDv7.GetRandomB();
+            byte[] randB1 = UUIDv7.GetRandomB();
+            byte[] randB2 = UUIDv7.GetRandomB();
 
             Assert.NotEqual(randB1, randB2);
         }
@@ -119,12 +119,12 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestNewUUIDv7()
         {
-            TensionDev.UUID.Uuid expectedUUID = new TensionDev.UUID.Uuid("017f22e2-79B0-7cc3-98c4-dc0c0c07398f");
+            Uuid expectedUUID = new Uuid("017f22e2-79B0-7cc3-98c4-dc0c0c07398f");
 
-            byte[] randA = new byte[] { 0x7c, 0xc3 };
-            byte[] randB = new byte[] { 0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39, 0x8f };
+            byte[] randA = [0x7c, 0xc3];
+            byte[] randB = [0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39, 0x8f];
             DateTime dateTime = DateTime.Parse("2022-02-22T19:22:22.000000Z");
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv7.NewUUIDv7(dateTime, randA, randB);
+            Uuid uuid = UUIDv7.NewUUIDv7(dateTime, randA, randB);
 
             Assert.Equal(expectedUUID, uuid);
         }
@@ -132,14 +132,14 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestUUIDVariantField()
         {
-            IList<char> expectedVariantField = new List<char>() { '8', '9', 'a', 'b' };
+            IList<char> expectedVariantField = ['8', '9', 'a', 'b'];
 
-            ConcurrentBag<String> concurrentBag = new ConcurrentBag<String>();
+            ConcurrentBag<String> concurrentBag = [];
 
             Parallel.For(0, UInt16.MaxValue,
                 body =>
                 {
-                    concurrentBag.Add(TensionDev.UUID.UUIDv7.NewUUIDv7().ToString());
+                    concurrentBag.Add(UUIDv7.NewUUIDv7().ToString());
                 });
 
             foreach (String value in concurrentBag)
@@ -152,40 +152,40 @@ namespace XUnitTestProjectUUID
         public void TestNewUUIDv7NullRandomA()
         {
             byte[] randA = null;
-            byte[] randB = new byte[] { 0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39, 0x8f };
-            Assert.Throws<ArgumentNullException>(() => TensionDev.UUID.UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
+            byte[] randB = [0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39, 0x8f];
+            Assert.Throws<ArgumentNullException>(() => UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
         }
 
         [Fact]
         public void TestNewUUIDv7ReducedRandomA()
         {
-            byte[] randA = new byte[] { 0x7c };
-            byte[] randB = new byte[] { 0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39, 0x8f };
-            Assert.Throws<ArgumentException>(() => TensionDev.UUID.UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
+            byte[] randA = [0x7c];
+            byte[] randB = [0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39, 0x8f];
+            Assert.Throws<ArgumentException>(() => UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
         }
 
         [Fact]
         public void TestNewUUIDv7NullRandomB()
         {
-            byte[] randA = new byte[] { 0x7c, 0xc3 };
+            byte[] randA = [0x7c, 0xc3];
             byte[] randB = null;
-            Assert.Throws<ArgumentNullException>(() => TensionDev.UUID.UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
+            Assert.Throws<ArgumentNullException>(() => UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
         }
 
         [Fact]
         public void TestNewUUIDv7ReducedRandomB()
         {
-            byte[] randA = new byte[] { 0x7c, 0xc3 };
-            byte[] randB = new byte[] { 0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39 };
-            Assert.Throws<ArgumentException>(() => TensionDev.UUID.UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
+            byte[] randA = [0x7c, 0xc3];
+            byte[] randB = [0x98, 0xc4, 0xdc, 0x0c, 0x0c, 0x07, 0x39];
+            Assert.Throws<ArgumentException>(() => UUIDv7.NewUUIDv7(DateTime.UtcNow, randA, randB));
         }
 
         [Fact]
         public void TestIsUUIDv7Withv1()
         {
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv1.NewUUIDv1();
+            Uuid uuid = UUIDv1.NewUUIDv1();
 
-            bool actual = TensionDev.UUID.UUIDv7.IsUUIDv7(uuid);
+            bool actual = UUIDv7.IsUUIDv7(uuid);
             Assert.False(actual);
         }
 
@@ -193,18 +193,18 @@ namespace XUnitTestProjectUUID
         public void TestIsUUIDv7Withv3()
         {
             String name = "www.google.com";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv3.NewUUIDv3(TensionDev.UUID.UUIDNamespace.DNS, name);
+            Uuid uuid = UUIDv3.NewUUIDv3(UUIDNamespace.DNS, name);
 
-            bool actual = TensionDev.UUID.UUIDv7.IsUUIDv7(uuid);
+            bool actual = UUIDv7.IsUUIDv7(uuid);
             Assert.False(actual);
         }
 
         [Fact]
         public void TestIsUUIDv7Withv4()
         {
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv4.NewUUIDv4();
+            Uuid uuid = UUIDv4.NewUUIDv4();
 
-            bool actual = TensionDev.UUID.UUIDv7.IsUUIDv7(uuid);
+            bool actual = UUIDv7.IsUUIDv7(uuid);
             Assert.False(actual);
         }
 
@@ -212,27 +212,27 @@ namespace XUnitTestProjectUUID
         public void TestIsUUIDv7Withv5()
         {
             String name = "www.contoso.com";
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv5.NewUUIDv5(TensionDev.UUID.UUIDNamespace.DNS, name);
+            Uuid uuid = UUIDv5.NewUUIDv5(UUIDNamespace.DNS, name);
 
-            bool actual = TensionDev.UUID.UUIDv7.IsUUIDv7(uuid);
+            bool actual = UUIDv7.IsUUIDv7(uuid);
             Assert.False(actual);
         }
 
         [Fact]
         public void TestIsUUIDv7Withv6()
         {
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv6.NewUUIDv6();
+            Uuid uuid = UUIDv6.NewUUIDv6();
 
-            bool actual = TensionDev.UUID.UUIDv7.IsUUIDv7(uuid);
+            bool actual = UUIDv7.IsUUIDv7(uuid);
             Assert.False(actual);
         }
 
         [Fact]
         public void TestIsUUIDv7Withv7()
         {
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv7.NewUUIDv7();
+            Uuid uuid = UUIDv7.NewUUIDv7();
 
-            bool actual = TensionDev.UUID.UUIDv7.IsUUIDv7(uuid);
+            bool actual = UUIDv7.IsUUIDv7(uuid);
             Assert.True(actual);
         }
 
@@ -240,9 +240,9 @@ namespace XUnitTestProjectUUID
         public void TestToDateTime()
         {
             DateTime expected = DateTime.UtcNow;
-            TensionDev.UUID.Uuid uuid = TensionDev.UUID.UUIDv7.NewUUIDv7(expected);
+            Uuid uuid = UUIDv7.NewUUIDv7(expected);
 
-            DateTime actual = TensionDev.UUID.UUIDv7.ToDateTime(uuid);
+            DateTime actual = UUIDv7.ToDateTime(uuid);
             Assert.Equal(expected, actual, TimeSpan.FromMilliseconds(1));
         }
     }

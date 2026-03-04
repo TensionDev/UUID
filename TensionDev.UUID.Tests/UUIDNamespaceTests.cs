@@ -1,14 +1,14 @@
 ﻿using System;
 using Xunit;
 
-namespace XUnitTestProjectUUID
+namespace TensionDev.UUID.Tests
 {
-    public class UnitTestUUIDNamespace
+    public class UUIDNamespaceTests
     {
         [Fact]
         public void TestUUIDNamespace_DNS()
         {
-            Byte[] guidBytes = TensionDev.UUID.UUIDNamespace.DNS.ToByteArray();
+            Byte[] guidBytes = UUIDNamespace.DNS.ToByteArray();
 
             Assert.Equal(0x6b, guidBytes[0]);
             Assert.Equal(0xa7, guidBytes[1]);
@@ -30,7 +30,7 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestUUIDNamespace_URL()
         {
-            Byte[] guidBytes = TensionDev.UUID.UUIDNamespace.URL.ToByteArray();
+            Byte[] guidBytes = UUIDNamespace.URL.ToByteArray();
 
             Assert.Equal(0x6b, guidBytes[0]);
             Assert.Equal(0xa7, guidBytes[1]);
@@ -52,7 +52,7 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestUUIDNamespace_ISOOID()
         {
-            Byte[] guidBytes = TensionDev.UUID.UUIDNamespace.OID.ToByteArray();
+            Byte[] guidBytes = UUIDNamespace.OID.ToByteArray();
 
             Assert.Equal(0x6b, guidBytes[0]);
             Assert.Equal(0xa7, guidBytes[1]);
@@ -74,7 +74,7 @@ namespace XUnitTestProjectUUID
         [Fact]
         public void TestUUIDNamespace_X500()
         {
-            Byte[] guidBytes = TensionDev.UUID.UUIDNamespace.X500.ToByteArray();
+            Byte[] guidBytes = UUIDNamespace.X500.ToByteArray();
 
             Assert.Equal(0x6b, guidBytes[0]);
             Assert.Equal(0xa7, guidBytes[1]);

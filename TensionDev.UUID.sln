@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UUIDUtil", "UUIDUtil\UUIDUtil.csproj", "{DF307C5B-6821-4CAD-A045-B2DF2D94743A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TensionDev.UUID", "TensionDev.UUID\TensionDev.UUID.csproj", "{DF307C5B-6821-4CAD-A045-B2DF2D94743A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestProjectUUID", "XUnitTestProjectUUID\XUnitTestProjectUUID.csproj", "{AA2755A0-FF8B-4F3E-813B-D4604B272738}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensionDev.UUID.Tests", "TensionDev.UUID.Tests\TensionDev.UUID.Tests.csproj", "{AA2755A0-FF8B-4F3E-813B-D4604B272738}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

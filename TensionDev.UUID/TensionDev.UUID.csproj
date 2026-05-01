@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net6.0;net8.0;net10.0</TargetFrameworks>
     <AssemblyName>TensionDev.UUID</AssemblyName>
     <RootNamespace>TensionDev.UUID</RootNamespace>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageId>TensionDev.UUID</PackageId>
-    <Version>2.4.0</Version>
+    <Version>2.5.0</Version>
     <Authors>TensionDev amsga</Authors>
     <Company>TensionDev</Company>
     <Product>TensionDev.UUID</Product>

@@ -26,8 +26,13 @@ namespace TensionDev.UUID
         private static Int32 s_clock = Int32.MinValue;
         private static readonly DateTime s_epoch = new DateTime(1582, 10, 15, 0, 0, 0, DateTimeKind.Utc);
 
+#if NET9_0_OR_GREATER
+        private static readonly System.Threading.Lock s_initLock = new System.Threading.Lock();
+        private static readonly System.Threading.Lock s_clockLock = new System.Threading.Lock();
+#else
         private static readonly Object s_initLock = new Object();
         private static readonly Object s_clockLock = new Object();
+#endif
 
         /// <summary>
         /// Initialises a new GUID/UUID based on Version 6 (date-time)
@@ -123,12 +128,19 @@ namespace TensionDev.UUID
         /// <returns>A byte-array representing the 48-bit Node ID</returns>
         public static Byte[] GetNodeID()
         {
+#if NET6_0_OR_GREATER
+            using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
+            Byte[] fakeNode = new Byte[6];
+            randomNumberGenerator.GetBytes(fakeNode);
+            return fakeNode;
+#else
             using (System.Security.Cryptography.RNGCryptoServiceProvider cryptoServiceProvider = new System.Security.Cryptography.RNGCryptoServiceProvider())
             {
                 Byte[] fakeNode = new Byte[6];
                 cryptoServiceProvider.GetBytes(fakeNode);
                 return fakeNode;
             }
+#endif
         }
 
         /// <summary>
@@ -142,6 +154,13 @@ namespace TensionDev.UUID
             {
                 if (s_clock < 0)
                 {
+#if NET6_0_OR_GREATER
+                    using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
+                    Byte[] clockInit = new Byte[4];
+                    randomNumberGenerator.GetBytes(clockInit);
+                    s_clock = BitConverter.ToInt32(clockInit, 0) & 0x3FFF;
+                    s_clock |= 0x8000;
+#else
                     using (System.Security.Cryptography.RNGCryptoServiceProvider cryptoServiceProvider = new System.Security.Cryptography.RNGCryptoServiceProvider())
                     {
                         Byte[] clockInit = new Byte[4];
@@ -149,6 +168,7 @@ namespace TensionDev.UUID
                         s_clock = BitConverter.ToInt32(clockInit, 0) & 0x3FFF;
                         s_clock |= 0x8000;
                     }
+#endif
                 }
             }
 

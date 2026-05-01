@@ -24,10 +24,19 @@ namespace TensionDev.UUID
     /// </summary>
     public static class UUIDv7
     {
+#if NETCOREAPP2_1_OR_GREATER
+        private static readonly DateTime s_epoch = DateTime.UnixEpoch;
+#else
         private static readonly DateTime s_epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+#endif
 
         private static UInt16 s_counter = 0;
+
+#if NET9_0_OR_GREATER
+        private static readonly System.Threading.Lock s_counterLock = new System.Threading.Lock();
+#else
         private static readonly Object s_counterLock = new Object();
+#endif
 
         /// <summary>
         /// The method of generating the clock sequence and Node ID.
@@ -143,12 +152,19 @@ namespace TensionDev.UUID
         /// <returns>A byte-array representing the 16-bit rand_a</returns>
         public static Byte[] GetRandomA()
         {
+#if NET6_0_OR_GREATER
+            using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
+            Byte[] fakeNode = new Byte[2];
+            randomNumberGenerator.GetBytes(fakeNode);
+            return fakeNode;
+#else
             using (System.Security.Cryptography.RNGCryptoServiceProvider cryptoServiceProvider = new System.Security.Cryptography.RNGCryptoServiceProvider())
             {
                 Byte[] fakeNode = new Byte[2];
                 cryptoServiceProvider.GetBytes(fakeNode);
                 return fakeNode;
             }
+#endif
         }
 
         /// <summary>
@@ -197,12 +213,19 @@ namespace TensionDev.UUID
         /// <returns>A byte-array representing the 64-bit rand_b</returns>
         public static Byte[] GetRandomB()
         {
+#if NET6_0_OR_GREATER
+            using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
+            Byte[] fakeNode = new Byte[8];
+            randomNumberGenerator.GetBytes(fakeNode);
+            return fakeNode;
+#else
             using (System.Security.Cryptography.RNGCryptoServiceProvider cryptoServiceProvider = new System.Security.Cryptography.RNGCryptoServiceProvider())
             {
                 Byte[] fakeNode = new Byte[8];
                 cryptoServiceProvider.GetBytes(fakeNode);
                 return fakeNode;
             }
+#endif
         }
 
         /// <summary>

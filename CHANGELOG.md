@@ -8,8 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added optimisations based on each framework's capability.
+- Added UUID v8 as a stub for future development through other libraries.
+
 ### Changed
 - Changed folder structure to match the TensionDev.UUID namespace.
+- Changed to target multiple frameworks.
 
 
 ## [v2.4.0] - 2026-01-30

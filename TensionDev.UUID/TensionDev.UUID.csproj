@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net6.0;net8.0;net10.0</TargetFrameworks>
     <AssemblyName>TensionDev.UUID</AssemblyName>
     <RootNamespace>TensionDev.UUID</RootNamespace>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -10,15 +10,15 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageId>TensionDev.UUID</PackageId>
-    <Version>2.4.0</Version>
+    <Version>2.5.0</Version>
     <Authors>TensionDev amsga</Authors>
     <Company>TensionDev</Company>
     <Product>TensionDev.UUID</Product>
     <Description>TensionDev.UUID is a .NET library that supports multiple UUID versions (v1, v3, v4, v5, v6, v7) with strict RFC compliance.</Description>
     <Copyright>Copyright (c) TensionDev 2021 - 2026</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/TensionDev/UUIDUtil</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/TensionDev/UUIDUtil</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/TensionDev/UUID</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TensionDev/UUID</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>UUID GUID</PackageTags>
     <PackageReleaseNotes>Change in license to Apache License 2.0.

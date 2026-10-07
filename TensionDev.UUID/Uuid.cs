@@ -446,14 +446,14 @@ namespace TensionDev.UUID
 
             // RFC 4122 big-endian layout
             sb.AppendFormat(FOUR_BYTE_HEX_FORMAT_STRING, _time_low);               // 8 hex digits
-            sb.Append("-");
+            sb.Append('-');
             sb.AppendFormat(TWO_BYTE_HEX_FORMAT_STRING, _time_mid);               // 4 hex digits
-            sb.Append("-");
+            sb.Append('-');
             sb.AppendFormat(TWO_BYTE_HEX_FORMAT_STRING, _time_hi_and_version);    // 4 hex digits
-            sb.Append("-");
+            sb.Append('-');
             sb.AppendFormat(ONE_BYTE_HEX_FORMAT_STRING, _clock_seq_hi_and_reserved);
             sb.AppendFormat(ONE_BYTE_HEX_FORMAT_STRING, _clock_seq_low);
-            sb.Append("-");
+            sb.Append('-');
 
             foreach (byte b in _node)
                 sb.AppendFormat(ONE_BYTE_HEX_FORMAT_STRING, b);
@@ -482,9 +482,9 @@ namespace TensionDev.UUID
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("(");
+            sb.Append('(');
             sb.Append(ToStringCannonical());
-            sb.Append(")");
+            sb.Append(')');
 
             return sb.ToString();
         }
@@ -493,9 +493,9 @@ namespace TensionDev.UUID
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("{");
+            sb.Append('{');
             sb.Append(ToStringCannonical());
-            sb.Append("}");
+            sb.Append('}');
 
             return sb.ToString();
         }

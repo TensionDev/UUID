@@ -39,10 +39,14 @@ namespace TensionDev.UUID
             Buffer.BlockCopy(nArray, 0, buffer, nsArray.Length, nArray.Length);
 
             Byte[] hash;
+#if NET6_0_OR_GREATER
+            hash = MD5.HashData(buffer);
+#else
             using (MD5 md5 = MD5.Create())
             {
                 hash = md5.ComputeHash(buffer);
             }
+#endif
 
             Byte[] hex = new Byte[16];
 

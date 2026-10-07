@@ -33,12 +33,20 @@ namespace TensionDev.UUID
             Byte[] clockSequence = new Byte[2];
             Byte[] nodeID = new Byte[6];
 
+#if NET6_0_OR_GREATER
+            // Fallback to random
+            using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
+            randomNumberGenerator.GetBytes(time);
+            randomNumberGenerator.GetBytes(clockSequence);
+            randomNumberGenerator.GetBytes(nodeID);
+#else
             using (System.Security.Cryptography.RNGCryptoServiceProvider cryptoServiceProvider = new System.Security.Cryptography.RNGCryptoServiceProvider())
             {
                 cryptoServiceProvider.GetBytes(time);
                 cryptoServiceProvider.GetBytes(clockSequence);
                 cryptoServiceProvider.GetBytes(nodeID);
             }
+#endif
 
             Byte[] hex = new Byte[16];
 

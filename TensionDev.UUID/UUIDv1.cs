@@ -60,8 +60,8 @@ namespace TensionDev.UUID
         /// </summary>
         /// <param name="nodeID">Given 48-bit Node ID</param>
         /// <returns>A new Uuid object</returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException">Thrown when nodeID is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when nodeID contains less than 6 bytes.</exception>
         public static Uuid NewUUIDv1(Byte[] nodeID)
         {
             return NewUUIDv1(DateTime.UtcNow, GetClockSequence(), nodeID);
@@ -74,8 +74,8 @@ namespace TensionDev.UUID
         /// <param name="clockSequence">Given 16-bit Clock Sequence with Variant</param>
         /// <param name="nodeID">Given 48-bit Node ID</param>
         /// <returns>A new Uuid object</returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException">Thrown when clockSequence or nodeID is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when clockSequence contains less than 2 bytes or nodeID contains less than 6 bytes.</exception>
         public static Uuid NewUUIDv1(DateTime dateTime, Byte[] clockSequence, Byte[] nodeID)
         {
             if (clockSequence == null)
@@ -223,7 +223,7 @@ namespace TensionDev.UUID
         /// </summary>
         /// <param name="uuid">The Uuid Version 1 object.</param>
         /// <returns>DateTime of the Uuid in UTC.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">Thrown when uuid is not a Version 1 UUID.</exception>
         public static DateTime ToDateTime(Uuid uuid)
         {
             if (!IsUUIDv1(uuid))
@@ -240,7 +240,7 @@ namespace TensionDev.UUID
         /// </summary>
         /// <param name="uuid">The Uuid Version 1 object.</param>
         /// <returns>The converted Uuid Version 6 object.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">Thrown when uuid is not a Version 1 UUID.</exception>
         public static Uuid ToUUIDv6(Uuid uuid)
         {
             if (!IsUUIDv1(uuid))

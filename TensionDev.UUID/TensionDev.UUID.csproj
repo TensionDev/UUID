@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageId>TensionDev.UUID</PackageId>
-    <Version>2.5.0</Version>
+    <Version>2.5.1</Version>
     <Authors>TensionDev amsga</Authors>
     <Company>TensionDev</Company>
     <Product>TensionDev.UUID</Product>
@@ -34,6 +34,10 @@ Release with UUID / GUID Version 1, Version 3, Version 4, Version 5, Versions 6 
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TensionDev.UUID.Tests" />
   </ItemGroup>
 
 </Project>

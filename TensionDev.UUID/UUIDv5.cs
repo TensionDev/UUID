@@ -26,8 +26,10 @@ namespace TensionDev.UUID
     public static class UUIDv5
     {
         /// <summary>
-        /// Initialises a new GUID/UUID based on Version 5 (SHA-1 namespace name-based)
+        /// Initialises a new GUID/UUID based on Version 5 (SHA-1 namespace name-based).
         /// </summary>
+        /// <param name="nameSpace">The namespace UUID to use for hashing.</param>
+        /// <param name="name">The name string to hash with the namespace using UTF-8 encoding.</param>
         /// <returns>A new Uuid object</returns>
         public static Uuid NewUUIDv5(Uuid nameSpace, String name)
         {

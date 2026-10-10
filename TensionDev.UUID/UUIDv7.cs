@@ -39,21 +39,24 @@ namespace TensionDev.UUID
 #endif
 
         /// <summary>
-        /// The method of generating the clock sequence and Node ID.
+        /// Specifies the method of generating the clock sequence and Node ID for UUIDv7.
         /// </summary>
         public enum GenerationMethod
         {
             /// <summary>
-            /// Random bits for the remaining 74 bits. 
+            /// Cryptographically random bits for the remaining 74 bits.
             /// </summary>
             Random = 0,
+
             /// <summary>
-            /// Fixed Bit-Length Dedicated Counter (Method 1)
+            /// Fixed Bit-Length Dedicated Counter (Method 1) as specified in RFC 9562 Section 6.2.
             /// </summary>
             Method1 = 1,
+
             //Method2 = 2,
+
             /// <summary>
-            /// Replace Leftmost Random Bits with Increased Clock Precision (Method 3)
+            /// Replace Leftmost Random Bits with Increased Clock Precision (Method 3) as specified in RFC 9562 Section 6.2.
             /// </summary>
             Method3 = 3,
         }
@@ -191,8 +194,8 @@ namespace TensionDev.UUID
         /// Initialises the 12-bit rand_a based on Method 3 in Section 6.2 and returns it.<br />
         /// Returns a Increased Clock Precision 16-bit rand_a.
         /// </summary>
-        /// <param name="currentDateTime"></param>
-        /// <returns>A byte-array representing the 16-bit rand_a</returns>
+        /// <param name="currentDateTime">The current date time to calculate precision interval from.</param>
+        /// <returns>A byte-array representing the 16-bit rand_a calculated from the sub-millisecond precision of the input datetime.</returns>
         public static Byte[] GetIncreasedClockPrecisionA(DateTime currentDateTime)
         {
             TimeSpan timeSince = currentDateTime.ToUniversalTime() - s_epoch.ToUniversalTime();
@@ -243,7 +246,7 @@ namespace TensionDev.UUID
         /// </summary>
         /// <param name="uuid">The Uuid Version 7 object</param>
         /// <returns>DateTime of the Uuid in UTC.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">Thrown when uuid is not a Version 7 UUID.</exception>
         public static DateTime ToDateTime(Uuid uuid)
         {
             if (!IsUUIDv7(uuid))

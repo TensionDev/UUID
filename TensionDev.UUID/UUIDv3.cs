@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
 //
 //   Copyright 2021 - 2026 TensionDev <TensionDev@outlook.com>
 //
@@ -26,8 +26,10 @@ namespace TensionDev.UUID
     public static class UUIDv3
     {
         /// <summary>
-        /// Initialises a new GUID/UUID based on Version 3 (MD5 namespace name-based)
+        /// Initialises a new GUID/UUID based on Version 3 (MD5 namespace name-based).
         /// </summary>
+        /// <param name="nameSpace">The namespace UUID to use for hashing.</param>
+        /// <param name="name">The name string to hash with the namespace using UTF-8 encoding.</param>
         /// <returns>A new Uuid object</returns>
         public static Uuid NewUUIDv3(Uuid nameSpace, String name)
         {

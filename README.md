@@ -25,7 +25,6 @@ This project references the following documents for implementation.
 - Converters:  
   - `ToGuid()` and `FromGuid(Guid)`  
   - `ToByteArray()` and `FromBytes(byte[])`  
-  - Variant conversions (`ToVariant1`, `ToVariant2`)  
 - Parsing utilities:  
   - `Parse(string)`  
   - `TryParse(string, out Uuid)`  

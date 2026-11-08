@@ -339,33 +339,44 @@ namespace TensionDev.UUID.Tests
         }
 
         [Fact]
-        public void TestToGuid()
+        public void TestGuidAndUuidUseDifferentByteArrayLayoutsForSameCanonicalValue()
         {
-            Guid expected = new Guid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
-            Uuid uuid = new Uuid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
+            // RFC 9562 Appendix A.3 UUIDv4 test vector; UUID octets use network byte order (Section 4).
+            const string canonical = "919108f7-52d1-4320-9bac-f847db4148a8";
+            Guid guid = new Guid(canonical);
+            Uuid uuid = new Uuid(canonical);
+            byte[] expectedUuidBytes = [0x91, 0x91, 0x08, 0xf7, 0x52, 0xd1, 0x43, 0x20, 0x9b, 0xac, 0xf8, 0x47, 0xdb, 0x41, 0x48, 0xa8];
+            byte[] expectedGuidBytes = [0xf7, 0x08, 0x91, 0x91, 0xd1, 0x52, 0x20, 0x43, 0x9b, 0xac, 0xf8, 0x47, 0xdb, 0x41, 0x48, 0xa8];
 
-            Guid actual = uuid.ToGuid();
-            Assert.Equal(expected, actual);
+            Assert.Equal(canonical, uuid.ToString("D"));
+            Assert.Equal(canonical, guid.ToString("D"));
+            Assert.Equal(expectedUuidBytes, uuid.ToByteArray());
+            Assert.Equal(expectedGuidBytes, guid.ToByteArray());
+            Assert.NotEqual(uuid.ToByteArray(), guid.ToByteArray());
+            Assert.Equal(guid, uuid.ToGuid());
         }
 
         [Fact]
-        public void TestToVariant2()
+        public void TestGuidAndUuidInterpretSameByteSequenceDifferently()
         {
-            Guid expected = new Guid("7d444840-9dc0-11d1-d245-5ffdce74fad2");
-            Uuid uuid = new Uuid("7d444840-9dc0-11d1-b245-5ffdce74fad2");
+            // The RFC 9562 Appendix A.3 test vector in canonical/network byte order.
+            byte[] bytes = [0x91, 0x91, 0x08, 0xf7, 0x52, 0xd1, 0x43, 0x20, 0x9b, 0xac, 0xf8, 0x47, 0xdb, 0x41, 0x48, 0xa8];
+            Uuid uuid = new Uuid(bytes);
+            Guid guid = new Guid(bytes);
 
-            Guid actual = uuid.ToMicrosoftVariant();
-            Assert.Equal(expected, actual);
+            Assert.Equal("919108f7-52d1-4320-9bac-f847db4148a8", uuid.ToString("D"));
+            Assert.Equal("f7089191-d152-2043-9bac-f847db4148a8", guid.ToString("D"));
+            Assert.NotEqual(uuid.ToString("D"), guid.ToString("D"));
         }
 
         [Fact]
-        public void TestToVariant1()
+        public void TestFromGuidPreservesValue()
         {
-            Uuid expected = new Uuid("7d444840-9dc0-11d1-9245-5ffdce74fad2");
             Guid guid = new Guid("7d444840-9dc0-11d1-d245-5ffdce74fad2");
 
-            Uuid actual = Uuid.ToRfc4122Variant(guid);
-            Assert.Equal(expected, actual);
+            Uuid actual = Uuid.FromGuid(guid);
+            Assert.Equal(guid.ToString("D"), actual.ToString("D"));
+            Assert.Equal(guid, actual.ToGuid());
         }
 
         [Fact]

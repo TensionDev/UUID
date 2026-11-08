@@ -361,39 +361,17 @@ namespace TensionDev.UUID
         /// <returns>A System.Guid object.</returns>
         public Guid ToGuid()
         {
-            return new Guid(ToString());
+            return new Guid(ToString("D"));
         }
 
         /// <summary>
-        /// Return the Microsoft Variant version in System.Guid.
-        /// </summary>
-        /// <returns>A System.Guid object.</returns>
-        public Guid ToMicrosoftVariant()
-        {
-            byte newClockSeq = (byte)(_clock_seq_hi_and_reserved & 0x1F);
-            newClockSeq = (byte)(newClockSeq | 0xC0);
-            byte[] array = ToByteArray();
-            array[8] = newClockSeq;
-            Uuid variant2 = new Uuid(array);
-
-            return variant2.ToGuid();
-        }
-
-        /// <summary>
-        /// Returns the RFC 4122 Variant version in TensionDev.UUID.Uuid.
+        /// Creates a Uuid from the canonical text representation of a System.Guid.
         /// </summary>
         /// <param name="guid">The System.Guid object to convert.</param>
-        /// <returns>A TensionDev.UUID.Uuid object.</returns>
-        public static Uuid ToRfc4122Variant(Guid guid)
+        /// <returns>A Uuid object with the same value as the specified Guid.</returns>
+        public static Uuid FromGuid(Guid guid)
         {
-            Uuid variant2 = new Uuid(guid.ToString());
-            byte newClockSeq = (byte)(variant2._clock_seq_hi_and_reserved & 0x3F);
-            newClockSeq = (byte)(newClockSeq | 0x80);
-            byte[] array = variant2.ToByteArray();
-            array[8] = newClockSeq;
-            Uuid variant1 = new Uuid(array);
-
-            return variant1;
+            return new Uuid(guid.ToString("D"));
         }
 
         /// <summary>

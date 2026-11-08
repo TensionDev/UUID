@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageId>TensionDev.UUID</PackageId>
-    <Version>2.5.1</Version>
+    <Version>2.6.0</Version>
     <Authors>TensionDev amsga</Authors>
     <Company>TensionDev</Company>
     <Product>TensionDev.UUID</Product>

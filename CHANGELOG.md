@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [v2.6.0] - 2026-11-08
+[v2.6.0](https://github.com/TensionDev/UUID/releases/tag/v2.6.0)
+
+### Added
+- Added `Uuid.FromGuid(Guid)` to convert from `System.Guid` using its canonical text representation.
+
+### Changed
+- Changed `Uuid.ToGuid()` to use the canonical text representation explicitly, preserving the UUID value and variant bits.
+
+### Removed
+- Removed `ToMicrosoftVariant()` and `ToRfc4122Variant(Guid)` because they rewrote UUID variant bits and were not needed for `Guid` conversion.
+
+### Fixed
+- Fixed UUIDv6 random Node IDs to set the required multicast bit.
+- Fixed UUIDv7 Method 1 to seed its counter per timestamp and handle counter exhaustion without wrapping UUID sort order backward.
+
+
 ## [v2.5.1] - 2026-10-10
 [v2.5.1](https://github.com/TensionDev/UUID/releases/tag/v2.5.1)
 

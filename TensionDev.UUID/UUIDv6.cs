@@ -132,12 +132,14 @@ namespace TensionDev.UUID
             using var randomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create();
             Byte[] fakeNode = new Byte[6];
             randomNumberGenerator.GetBytes(fakeNode);
+            fakeNode[0] = (Byte)(fakeNode[0] | 0x01);
             return fakeNode;
 #else
             using (System.Security.Cryptography.RNGCryptoServiceProvider cryptoServiceProvider = new System.Security.Cryptography.RNGCryptoServiceProvider())
             {
                 Byte[] fakeNode = new Byte[6];
                 cryptoServiceProvider.GetBytes(fakeNode);
+                fakeNode[0] = (Byte)(fakeNode[0] | 0x01);
                 return fakeNode;
             }
 #endif

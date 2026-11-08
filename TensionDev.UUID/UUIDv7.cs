@@ -31,6 +31,8 @@ namespace TensionDev.UUID
 #endif
 
         private static UInt16 s_counter = 0;
+        private static Int64 s_method1TimestampMilliseconds = -1;
+        private static UInt16 s_method1Counter;
 
 #if NET9_0_OR_GREATER
         private static readonly System.Threading.Lock s_counterLock = new System.Threading.Lock();
@@ -86,7 +88,9 @@ namespace TensionDev.UUID
                     return NewUUIDv7(dateTime, GetRandomA(), GetRandomB());
 
                 case GenerationMethod.Method1:
-                    return NewUUIDv7(dateTime, GetFixedBitLengthDedicatedCounterA(), GetRandomB());
+                    Int64 requestedTimestamp = GetUnixTimestampMilliseconds(dateTime);
+                    Int64 effectiveTimestamp = GetMethod1Counter(requestedTimestamp, out Byte[] counterA);
+                    return NewUUIDv7(effectiveTimestamp, counterA, GetRandomB());
 
                 case GenerationMethod.Method3:
                     return NewUUIDv7(dateTime, GetIncreasedClockPrecisionA(dateTime), GetRandomB());
@@ -116,20 +120,22 @@ namespace TensionDev.UUID
             if (randomB.Length < 8)
                 throw new ArgumentException(String.Format("rand_b contains less than 64-bit: {0} bytes", randomB.Length), nameof(randomB));
 
-            TimeSpan timeSince = dateTime.ToUniversalTime() - s_epoch.ToUniversalTime();
-            Int64 timeInterval = ((Int64)timeSince.TotalMilliseconds) << 16;
+            Int64 timeInterval = GetUnixTimestampMilliseconds(dateTime);
 
-            Byte[] time = BitConverter.GetBytes(System.Net.IPAddress.HostToNetworkOrder(timeInterval));
+            return NewUUIDv7(timeInterval, randomA, randomB);
+        }
+
+        private static Uuid NewUUIDv7(Int64 timeInterval, Byte[] randomA, Byte[] randomB)
+        {
 
             Byte[] hex = new Byte[16];
 
-            hex[0] = time[0];
-            hex[1] = time[1];
-            hex[2] = time[2];
-            hex[3] = time[3];
-
-            hex[4] = time[4];
-            hex[5] = time[5];
+            hex[0] = (Byte)(timeInterval >> 40);
+            hex[1] = (Byte)(timeInterval >> 32);
+            hex[2] = (Byte)(timeInterval >> 24);
+            hex[3] = (Byte)(timeInterval >> 16);
+            hex[4] = (Byte)(timeInterval >> 8);
+            hex[5] = (Byte)timeInterval;
 
             hex[6] = (Byte)((randomA[0] & 0x0F) + 0x70);
             hex[7] = randomA[1];
@@ -171,12 +177,14 @@ namespace TensionDev.UUID
         }
 
         /// <summary>
-        /// Initialises the 12-bit rand_a based on Method 1 in Section 6.2 and returns it.<br />
-        /// Returns a Fixed-Length Dedicated Counter 16-bit rand_a.
+        /// Returns the next value from a standalone 12-bit counter helper.<br />
+        /// UUIDv7 Method 1 generation uses a separate timestamp-aware counter with rollover handling.
         /// </summary>
         /// <returns>A byte-array representing the 16-bit rand_a</returns>
         public static Byte[] GetFixedBitLengthDedicatedCounterA()
         {
+            // Retained as a low-level wrapping 12-bit counter helper for compatibility.
+            // UUIDv7 Method1 uses a timestamp-aware counter with rollover handling below.
             lock (s_counterLock)
             {
                 Int16 value = Convert.ToInt16(s_counter);
@@ -253,28 +261,69 @@ namespace TensionDev.UUID
                 throw new ArgumentException(String.Format("{0} is not a Version 7 UUID.", uuid), nameof(uuid));
 
             long timeInterval = GetTimeInterval(uuid);
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(timeInterval);
-
-            return s_epoch.ToUniversalTime() + timeSpan;
+            return s_epoch.AddTicks(timeInterval * TimeSpan.TicksPerMillisecond);
         }
 
         private static Int64 GetTimeInterval(Uuid uuid)
         {
             Byte[] hex = uuid.ToByteArray();
-            Byte[] time = new Byte[8];
 
-            time[0] = hex[0];
-            time[1] = hex[1];
-            time[2] = hex[2];
-            time[3] = hex[3];
-            time[4] = hex[4];
-            time[5] = hex[5];
-            time[6] = hex[6];
-            time[7] = hex[7];
+            return ((Int64)hex[0] << 40)
+                | ((Int64)hex[1] << 32)
+                | ((Int64)hex[2] << 24)
+                | ((Int64)hex[3] << 16)
+                | ((Int64)hex[4] << 8)
+                | hex[5];
+        }
 
-            Int64 timeInterval = System.Net.IPAddress.NetworkToHostOrder(BitConverter.ToInt64(time, 0));
-            timeInterval >>= 16;
+        private static Int64 GetUnixTimestampMilliseconds(DateTime dateTime)
+        {
+            TimeSpan timeSince = dateTime.ToUniversalTime() - s_epoch;
+            if (timeSince.Ticks < 0)
+                throw new ArgumentOutOfRangeException(nameof(dateTime), "The date-time is outside the UUIDv7 48-bit Unix timestamp range.");
+
+            Int64 timeInterval = timeSince.Ticks / TimeSpan.TicksPerMillisecond;
+
+            if (timeInterval < 0 || timeInterval > 0xFFFFFFFFFFFFL)
+                throw new ArgumentOutOfRangeException(nameof(dateTime), "The date-time is outside the UUIDv7 48-bit Unix timestamp range.");
+
             return timeInterval;
+        }
+
+        private static Int64 GetMethod1Counter(Int64 requestedTimestamp, out Byte[] counterA)
+        {
+            lock (s_counterLock)
+            {
+                if (s_method1TimestampMilliseconds < 0 || requestedTimestamp > s_method1TimestampMilliseconds)
+                {
+                    s_method1TimestampMilliseconds = requestedTimestamp;
+                    s_method1Counter = GetRandomCounterA();
+                }
+                else if (s_method1Counter < 0x0FFF)
+                {
+                    ++s_method1Counter;
+                }
+                else
+                {
+                    // Advance the logical timestamp rather than wrapping the counter and sorting backward.
+                    ++s_method1TimestampMilliseconds;
+                    s_method1Counter = GetRandomCounterA();
+                }
+
+                counterA = new Byte[]
+                {
+                    (Byte)(s_method1Counter >> 8),
+                    (Byte)s_method1Counter
+                };
+
+                return s_method1TimestampMilliseconds;
+            }
+        }
+
+        private static UInt16 GetRandomCounterA()
+        {
+            Byte[] randomA = GetRandomA();
+            return (UInt16)(((randomA[0] & 0x0F) << 8) | randomA[1]);
         }
     }
 }

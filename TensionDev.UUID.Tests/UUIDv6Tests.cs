@@ -27,6 +27,16 @@ namespace TensionDev.UUID.Tests
         }
 
         [Fact]
+        public void TestRandomNodeIDSetsMulticastBit()
+        {
+            byte[] nodeID = UUIDv6.GetNodeID();
+            Uuid uuid = UUIDv6.NewUUIDv6();
+
+            Assert.Equal(0x01, nodeID[0] & 0x01);
+            Assert.Equal(0x01, uuid.ToByteArray()[10] & 0x01);
+        }
+
+        [Fact]
         public void TestNewUUIDv6()
         {
             Uuid expectedUUID = new Uuid("1ec9414c-232a-6b00-82a8-0242ac130003");

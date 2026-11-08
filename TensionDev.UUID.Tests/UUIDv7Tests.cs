@@ -130,6 +130,56 @@ namespace TensionDev.UUID.Tests
         }
 
         [Fact]
+        public void TestMethod1CounterIsMonotonicAndHandlesRollover()
+        {
+            DateTime timestamp = DateTime.UtcNow.AddYears(1);
+            Uuid previous = UUIDv7.NewUUIDv7(timestamp, UUIDv7.GenerationMethod.Method1);
+            DateTime firstTimestamp = UUIDv7.ToDateTime(previous);
+            Uuid current = UUIDv7.NewUUIDv7(timestamp, UUIDv7.GenerationMethod.Method1);
+            Assert.True(previous.CompareTo(current) < 0);
+
+            previous = current;
+            current = UUIDv7.NewUUIDv7(timestamp.AddMilliseconds(1), UUIDv7.GenerationMethod.Method1);
+            Assert.True(previous.CompareTo(current) < 0);
+            DateTime advancedTimestamp = UUIDv7.ToDateTime(current);
+            Assert.Equal(firstTimestamp.AddMilliseconds(1), advancedTimestamp);
+
+            // A backwards requested timestamp must continue from the last emitted timestamp.
+            previous = current;
+            current = UUIDv7.NewUUIDv7(timestamp, UUIDv7.GenerationMethod.Method1);
+            Assert.True(previous.CompareTo(current) < 0);
+            Assert.Equal(advancedTimestamp, UUIDv7.ToDateTime(current));
+
+            previous = current;
+            for (int i = 0; i < 0x1001; ++i)
+            {
+                current = UUIDv7.NewUUIDv7(timestamp.AddMilliseconds(1), UUIDv7.GenerationMethod.Method1);
+                Assert.True(previous.CompareTo(current) < 0);
+                previous = current;
+            }
+
+            Assert.True(UUIDv7.ToDateTime(current) > firstTimestamp);
+        }
+
+        [Fact]
+        public void TestNewUUIDv7RejectsDateBeforeUnixEpoch()
+        {
+            byte[] randomA = [0x00, 0x00];
+            byte[] randomB = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                UUIDv7.NewUUIDv7(DateTime.UnixEpoch.AddTicks(-1), randomA, randomB));
+        }
+
+        [Fact]
+        public void TestMethod3Generation()
+        {
+            Uuid uuid = UUIDv7.NewUUIDv7(DateTime.UtcNow, UUIDv7.GenerationMethod.Method3);
+
+            Assert.True(UUIDv7.IsUUIDv7(uuid));
+        }
+
+        [Fact]
         public void TestUUIDVariantField()
         {
             IList<char> expectedVariantField = ['8', '9', 'a', 'b'];
